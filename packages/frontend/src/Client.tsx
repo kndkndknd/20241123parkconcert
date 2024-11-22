@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const Client: React.FC = () => {
   const [initialized, setInitialized] = useState(false);
@@ -10,6 +11,8 @@ const Client: React.FC = () => {
   const [oscillator1, setOscillator1] = useState<OscillatorNode | null>(null);
   const [oscillator2, setOscillator2] = useState<OscillatorNode | null>(null);
   const [text, setText] = useState<string>("画面にタップしてください");
+
+  const clientId = uuidv4();
 
   // 原点の取得
   useEffect(() => {
@@ -81,7 +84,7 @@ const Client: React.FC = () => {
       fetch(
         `https://${import.meta.env.VITE_BACKEND_URL}/gps?latitude=${String(
           latitude
-        )}&longitude=${String(longitude)}`
+        )}&longitude=${String(longitude)}&clientId=${clientId}`
       )
         .then((response) => {
           if (!response.ok) {

@@ -7,12 +7,14 @@ import { networkInterfaces } from "os";
 import dotenv from "dotenv";
 dotenv.config();
 
-import WebSocket, { WebSocketServer } from "ws";
+import { writeOutLog } from "./util/writeOutLog";
 
-interface Client {
-  id: string;
-  socket: WebSocket;
-}
+// import WebSocket, { WebSocketServer } from "ws";
+
+// interface Client {
+//   id: string;
+//   socket: WebSocket;
+// }
 
 interface GpsData {
   timestamp: Date;
@@ -79,7 +81,7 @@ const host = getIpAddress() || "localhost";
 console.log(`Server listening on ${host}:${port}`);
 
 // const io: SocketIO.Server = ioServer(httpserver);
-const wss = new WebSocketServer({ server: httpserver });
+// const wss = new WebSocketServer({ server: httpserver });
 
 // wss.on("connection", function connection(ws) {
 //   let clientId: string | undefined;
@@ -156,19 +158,20 @@ app.get("/", function (req, res, next) {
 });
 
 app.get("/gps", function (req, res) {
-  const ipAdress = req.socket.remoteAddress;
+  // const ipAdress = req.socket.remoteAddress;
   const latitudeStr = req.query.latitude as string;
   const longitudeStr = req.query.longitude as string;
+  const clientId = req.query.clientId as string;
   const now = new Date();
-  console.log(`ipAdress: ${ipAdress}`);
-  if (Object.keys(gpsObj).includes(ipAdress)) {
-    gpsObj[ipAdress].push({
+  // console.log(`ipAdress: ${ipAdress}`);
+  if (Object.keys(gpsObj).includes(clientId)) {
+    gpsObj[clientId].push({
       timestamp: now,
       latitude: Number(latitudeStr),
       longitude: Number(longitudeStr),
     });
   } else {
-    gpsObj[ipAdress] = [
+    gpsObj[clientId] = [
       {
         timestamp: now,
         latitude: Number(latitudeStr),
@@ -183,4 +186,9 @@ app.get("/gps", function (req, res) {
 
 app.get("/origingps", function (req, res) {
   res.json(originGps);
+});
+
+app.get("/writeout", function async(req, res) {
+  const logResult = writeOutLog(gpsObj);
+  res.json({ success: logResult });
 });

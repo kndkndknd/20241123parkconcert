@@ -3,7 +3,7 @@ import * as fs from "fs";
 
 import { getDateTimeString } from "./getDateTimeString";
 
-export const putLogFile = (log) => {
+export const writeOutLog = (log) => {
   const { yyyy, mm, dd, hh, mi, ss } = getDateTimeString();
   const logPath = path.join(
     __dirname,
@@ -12,7 +12,7 @@ export const putLogFile = (log) => {
     "log",
     `${yyyy}${mm}${dd}${hh}${mi}${ss}.json`
   );
-  const result = fs.appendFile(logPath, JSON.stringify(log), (err) => {
+  fs.appendFile(logPath, JSON.stringify(log), (err) => {
     if (err) {
       console.error(err);
       return false;
@@ -20,5 +20,5 @@ export const putLogFile = (log) => {
       return true;
     }
   });
-  return result;
+  // return result;
 };
