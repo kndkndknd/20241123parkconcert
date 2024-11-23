@@ -21,12 +21,12 @@ export default defineConfig({
   server: {
     https: {
       key: fs.readFileSync(
-        // path.join(__dirname, "../../..", "keys/chat/privkey.pem")
-        path.join(__dirname, "../../..", "keys/chat/private.key")
+        path.join(__dirname, "../../..", "keys/parkconcert/privkey.pem")
+        // path.join(__dirname, "../../..", "keys/chat/private.key")
       ),
       cert: fs.readFileSync(
-        path.join(__dirname, "../../..", "keys/chat/selfsigned.crt")
-        // path.join(__dirname, "../../..", "keys/chat/fullchain.pem")
+        // path.join(__dirname, "../../..", "keys/chat/selfsigned.crt")
+        path.join(__dirname, "../../..", "keys/parkconcert/fullchain.pem")
       ),
       passphrase: "chat",
     },
